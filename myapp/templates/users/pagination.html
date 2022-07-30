@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}
+  My SysFile
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <!-- Conteudo do cabecalho do card-->
+    List of Users
+  </div>
+  <div class="card-body">
+    <!-- Conteudo do corpo do card-->
+    <div class="container">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td>{{ loop.index + (page - 1) * per_page }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.email_address}} </td>
+              <td><a href="#">Edit</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {{ pagination.links }}
+  </div>
+
+  </div>
+</div>     
+
+{% endblock %}

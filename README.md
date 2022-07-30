@@ -40,7 +40,7 @@ export FLASK_APP=run.py && export FLASK_ENV=development
 ## 4. Para executar a aplicação principal
 
 ```bash
-flask run --host:0.0.0.0 --port=5000
+flask run --host=0.0.0.0 --port=5000
 ```
 
 ## 5. Segue a estrutura base dos diretorios no projeto da aplicacao myapp

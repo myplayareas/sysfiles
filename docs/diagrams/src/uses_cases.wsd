@@ -1,0 +1,71 @@
+@startuml
+skinparam actorStyle awesome
+
+' Actor definition
+actor User
+actor Admin
+
+' Usecase definition
+usecase (Register) as uc_register
+usecase (Login) as uc_login
+usecase (Logout) as uc_logout
+usecase (Password \nrecover) as uc_password_recover
+usecase (Dashboard \nUser) as uc_dashboard_user
+usecase (Dashboard \nAdmin) as uc_dashboard_admin
+usecase (Manage My Images) as uc_manage_image
+usecase (Insert Image) as uc_private_image
+usecase (List My \nImages) as uc_list_private_image
+usecase (Delete Image) as uc_delete_private_image
+usecase (Manage \n All Images) as uc_manage_all_images
+usecase (List All \nImages) as uc_list_all_images
+usecase (Select Image) as uc_select_private_image
+usecase (View Image) as uc_view_private_image
+usecase (Search My \nImages) as uc_search_private_image
+usecase (Manage User) as uc_manage_user
+usecase (List Users) as uc_list_users
+usecase (Edit User) as uc_edit_users
+usecase (Delete User) as uc_delete_users
+usecase (Select User) as uc_select_user
+usecase (List Result \nImages) as uc_list_result_images
+usecase (Search All \nImages) as uc_search_all_images
+usecase (List Result \nAll Images) as uc_list_result_all_images
+usecase (Search All \nUsers) as uc_search_all_users
+usecase (List Result \nAll Users) as uc_list_result_all_users
+
+Admin --> uc_login
+uc_dashboard_admin --> uc_manage_all_images
+uc_manage_all_images --> uc_list_all_images
+uc_select_private_image <- uc_list_all_images
+uc_manage_all_images --> uc_search_all_images
+uc_search_all_images --> uc_list_result_all_images
+uc_select_private_image <-- uc_list_result_all_images 
+
+uc_dashboard_admin --> uc_manage_user
+uc_manage_user --> uc_list_users
+uc_list_users --> uc_select_user
+uc_select_user --> uc_edit_users
+uc_select_user --> uc_delete_users
+uc_manage_user --> uc_search_all_users
+uc_search_all_users --> uc_list_result_all_users
+uc_list_result_all_users --> uc_select_user
+
+uc_dashboard_user -> uc_manage_image
+uc_manage_image <- uc_dashboard_admin
+uc_manage_image --> uc_private_image
+uc_manage_image --> uc_list_private_image
+uc_manage_image --> uc_search_private_image
+uc_search_private_image --> uc_list_result_images
+uc_list_result_images --> uc_select_private_image
+uc_list_private_image --> uc_select_private_image
+uc_select_private_image --> uc_delete_private_image
+uc_select_private_image --> uc_view_private_image 
+
+uc_register <- User
+User --> uc_login
+uc_login --> uc_dashboard_user
+uc_login --> uc_dashboard_admin
+
+User --> uc_password_recover
+uc_dashboard_user --> uc_logout
+
+@enduml
