@@ -45,36 +45,36 @@ flask run --host:0.0.0.0 --port=5000
 
 ## 5. Segue a estrutura base dos diretorios no projeto da aplicacao myapp
 
-requirements.txt - arquivo que contem os módulos, pacotes e bibliotecas que serão usados pela aplicação
+*requirements.txt* - arquivo que contem os módulos, pacotes e bibliotecas que serão usados pela aplicação
 
-run.py - script principal que carrega o banco de dados (db) e executa a aplicação principal (app)
+*run.py* - script principal que carrega o banco de dados (db) e executa a aplicação principal (app)
 
-docs - diretório que guarda a documentação do projeto como arquitetura, design, requisitos e demais documentos de apoio como esquemas de UI ou fluxos BPMN
+*docs* - diretório que guarda a documentação do projeto como arquitetura, design, requisitos e demais documentos de apoio como esquemas de UI ou fluxos BPMN
 
-myapp - diretorio que contem os módulos de implementação do projeto, a pasta static e a pasta template.
+*myapp* - diretorio que contem os módulos de implementação do projeto, a pasta static e a pasta template.
 
-myapp/__init__.py - script principal que instancia e configura a aplicação (app). Também importa os demais módulos da aplicação.
+*myapp/__init__.py* - script principal que instancia e configura a aplicação (app). Também importa os demais módulos da aplicação.
 
-myapp/static - guarda arquivos estáticos como css, javascripts e resources (imagens e demais arquivos públicos)
+*myapp/static* - guarda arquivos estáticos como css, javascripts e resources (imagens e demais arquivos públicos)
 
-myapp/templates - templates (views) da aplicação
+*myapp/templates* - templates (views) da aplicação
 
-myapp/templates/authenticate - templates (views) .html da autenticação dos usuários (login, register, password recovery)
+*myapp/templates/authenticate* - templates (views) .html da autenticação dos usuários (login, register, password recovery)
 
-myapp/templates/base.html - view base dos templates
+*myapp/templates/base.html* - view base dos templates
 
-myapp/authentication.py - módulo de autenticação dos usuários da aplicação.
+*myapp/authentication.py* - módulo de autenticação dos usuários da aplicação.
 
-myapp/dao.py - definição das classes de manipulação do ORM (Object–relational mapping) para manipular o banco de dados.
+*myapp/dao.py* - definição das classes de manipulação do ORM (Object–relational mapping) para manipular o banco de dados.
 
-myapp/errors.py - módulo que manipula as páginas de erros (4xx - client errors, 5xx - server errors) http (HTTP status codes) da aplicação
+*myapp/errors.py* - módulo que manipula as páginas de erros (4xx - client errors, 5xx - server errors) http (HTTP status codes) da aplicação
 
-myapp/forms.py - módulo que define os formulários e suas validações
+*myapp/forms.py* - módulo que define os formulários e suas validações
 
-myapp/main.py - módulo principal que manipula as rotas de acesso geral da aplicação
+*myapp/main.py* - módulo principal que manipula as rotas de acesso geral da aplicação
 
-myapp/users.py - módulo que manipula as rotas dos usuários que acessam a aplicação
+*myapp/users.py* - módulo que manipula as rotas dos usuários que acessam a aplicação
 
-myapp/uploads.py - módulo que manipula as rotas de uploads de arquivos
+*myapp/uploads.py* - módulo que manipula as rotas de uploads de arquivos
 
-myapp/utils.py - módulo de utilidades genéricas da aplicação
+*myapp/utils.py* - módulo de utilidades genéricas da aplicação
