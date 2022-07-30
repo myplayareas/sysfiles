@@ -7,7 +7,7 @@ from os import listdir
 from os.path import isfile, join
 from PIL import Image
 from flask_paginate import Pagination, get_page_args
-from myapp.dao import Users, Files
+from myapp.dao import Users, Files, File
 
 users_services = Users()
 files_services = Files()
@@ -102,3 +102,30 @@ def delete_image(id, name):
     else:
         flash(f'The file {name} does not exist!', category='danger')        
     return redirect(url_for('pagination_list_files_page'))
+
+@app.route('/uploads/progress', methods=['GET'])
+@login_required
+def load_upload_classic_progress_page():
+    return render_template('uploads/upload_classic_progress.html')
+
+@app.route('/uploads/progress', methods=['POST'])
+@login_required
+def upload_classic_progress():    
+    # Faz o upload do arquivo
+    uploaded_file = request.files['uploadFile']
+    try: 
+        filename_secure = secure_filename(uploaded_file.filename)
+        path_to_save_image = user_directory(app.config['UPLOAD_FOLDER'], current_user.get_id())
+        uploaded_file.save(os.path.join(path_to_save_image, filename_secure))
+        filenameimage = filename_secure
+        file_to_save = File(name=filename_secure)
+        files_services.insert_file(file_to_save)
+        path_to_save_image_thumbnail = user_directory(app.config['UPLOAD_FOLDER_THUMBNAILS'], current_user.get_id())
+        tnails(filename_secure, path_to_save_image, path_to_save_image_thumbnail)
+        users_services.link_to_file(user_id=current_user.get_id(), file=file_to_save)
+        msg = f'Upload {filename_secure} accomplished with success!'
+    except Exception as e:
+        flash(f'Error in Upload - {e}', category='danger')
+        return redirect(url_for('list_files_page'))
+
+    return jsonify({'htmlresponse': render_template('uploads/response.html', msg=msg, filenameimage=filenameimage)})

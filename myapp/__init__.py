@@ -32,7 +32,7 @@ app.config['PATH_MYAPP'] = PATH_MYAPP
 app.config['PATH_STATIC'] = PATH_STATIC
 app.config['PATH_IMG'] = PATH_IMG
 app.config['ALLOWED_EXTENSIONS'] = ALLOWED_EXTENSIONS
-app.config['MAX_CONTENT_LENGTH'] = 5 * 1000 * 1000
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1000 * 1000
 
 print('Cria a instancia do banco myapp.db')
 # Cria a instancia ORM de banco de dados e associa aplicacao (app)

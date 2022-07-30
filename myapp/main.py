@@ -9,7 +9,7 @@ from myapp.uploads import update_list_images
 def myapp_page():
     users_service = Users()
     all_users = users_service.list_all_users()
-    return render_template('user/myapp.html', users=all_users)
+    return render_template('users/myapp.html', users=all_users)
 
 @app.route('/dashboard')
 @login_required
