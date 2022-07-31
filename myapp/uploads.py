@@ -9,8 +9,8 @@ from PIL import Image
 from flask_paginate import Pagination, get_page_args
 from myapp.dao import Users, Files, File
 
-users_services = Users()
-files_services = Files()
+users_service = Users()
+files_service = Files()
 
 class MyImage: # This represents your class
   def __init__(self, id, name):
@@ -93,9 +93,9 @@ def delete_image(id, name):
         try:
             os.remove(image_name_uploads)
             os.remove(image_name_thubnails)
-            file_to_delete = files_services.query_file_by_name(name)
-            users_services.unlink_file(user_id=current_user.get_id(), file=file_to_delete)
-            files_services.delete_file(file_to_delete)
+            file_to_delete = files_service.query_file_by_name(name)
+            users_service.unlink_file(user_id=current_user.get_id(), file=file_to_delete)
+            files_service.delete_file(file_to_delete)
             flash(f'{name} deleted successfully!', category='success')
         except Exception as e:
             flash(f'Error {e} during deletion of {name}!', category='danger')
@@ -119,13 +119,39 @@ def upload_classic_progress():
         uploaded_file.save(os.path.join(path_to_save_image, filename_secure))
         filenameimage = filename_secure
         file_to_save = File(name=filename_secure)
-        files_services.insert_file(file_to_save)
+        files_service.insert_file(file_to_save)
         path_to_save_image_thumbnail = user_directory(app.config['UPLOAD_FOLDER_THUMBNAILS'], current_user.get_id())
         tnails(filename_secure, path_to_save_image, path_to_save_image_thumbnail)
-        users_services.link_to_file(user_id=current_user.get_id(), file=file_to_save)
+        users_service.link_to_file(user_id=current_user.get_id(), file=file_to_save)
         msg = f'Upload {filename_secure} accomplished with success!'
     except Exception as e:
         flash(f'Error in Upload - {e}', category='danger')
         return redirect(url_for('list_files_page'))
 
     return jsonify({'htmlresponse': render_template('uploads/response.html', msg=msg, filenameimage=filenameimage)})
+
+@app.route('/uploads/progress/multiple/files', methods=['GET'])
+@login_required
+def load_upload_progress_multiple_files_page():
+    return render_template('uploads/upload_progress_multiple_files.html')
+
+@app.route('/uploads/progress/multiple/files', methods=['POST'])
+@login_required
+def upload_progress_multiple_files():    
+    # Faz o upload do arquivo
+    uploaded_file = request.files['file']
+    try: 
+        filename_secure = secure_filename(uploaded_file.filename)
+        path_to_save_image = user_directory(app.config['UPLOAD_FOLDER'], current_user.get_id())
+        uploaded_file.save(os.path.join(path_to_save_image, filename_secure))
+        file_to_save = File(name=filename_secure)
+        files_service.insert_file(file_to_save)
+        path_to_save_image_thumbnail = user_directory(app.config['UPLOAD_FOLDER_THUMBNAILS'], current_user.get_id())
+        tnails(filename_secure, path_to_save_image, path_to_save_image_thumbnail)
+        users_service.link_to_file(user_id=current_user.get_id(), file=file_to_save)
+        flash(f'Upload {filename_secure} accomplished with success!', category='success')
+    except Exception as e:
+        flash(f'Error in Upload - {e}', category='danger')
+        return redirect(url_for('list_files_page'))
+
+    return '', 204

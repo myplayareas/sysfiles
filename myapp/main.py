@@ -7,10 +7,9 @@ from myapp.uploads import update_list_images
 @app.route('/myapp')
 @login_required
 def myapp_page():
-    users_service = Users()
-    all_users = users_service.list_all_users()
-    return render_template('users/myapp.html', users=all_users)
-
+    total_images = len(update_list_images())
+    return render_template('users/dashboard.html', qtd_images=total_images)
+    
 @app.route('/dashboard')
 @login_required
 def dashboard_page():
