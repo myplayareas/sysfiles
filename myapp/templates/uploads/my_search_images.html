@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}
+  All Images
+{% endblock %}
+
+{% block content %}
+
+<script>
+$(document).on("click", "#search", function (e) {
+    e.preventDefault();
+        var search_term = $('input[name=query]').val().toLowerCase();
+    console.log(search_term )
+        $.ajax(
+            {
+                type: "GET",
+                url: "{{url_for('search_my_images')}}",
+                data: { "query": search_term },
+                success: function (response) {
+                        $("#result").empty(); //remove whatever is there and append whatever is returned
+            $("#result").append(response.result) //append whatever you want to append
+                }
+            }
+        )
+    });
+</script>
+
+<div class="card">
+    <div class="card-header">
+        <!-- Conteudo do cabecalho do card-->
+        Search my images
+    </div>
+    <div class="card-body">
+    <!-- Conteudo do corpo do card-->
+
+    <input type="text" size="18" name="query"><a href="{{ url_for('search_my_images') }}" id=search>Go!</a>
+    <br>
+    <div id="result">
+        Results will appear here!
+    </div>
+
+    </div>
+</div>     
+
+{% endblock %}    

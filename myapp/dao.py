@@ -100,6 +100,18 @@ class Users:
         user = User.query.filter_by(id=user_id).first()        
         return user.my_files
 
+    def get_my_files_contains(self, user_id, query):
+        # retorna todos os arquivos do user_id
+        list_my_files = User.query.filter_by(id=user_id).first().my_files
+        # retorna todos os arquivos que contem a query
+        list_files_contains =  File.query.filter(File.name.contains(query))
+        list_result = []
+        # para cada item da lista que retorna contains checa se pertence a lista de arquivos do user_id
+        for each_contains in list_files_contains: 
+            if each_contains in list_my_files: 
+                list_result.append(each_contains)
+        return list_result
+
 class Files:
     def insert_file(self, file):
         try:
@@ -126,3 +138,10 @@ class Files:
             db.session.commit()
         except Exception as e:
             raise Exception(f'Error during delete file - {e}')
+
+    def search_file_by_name_contains(self, contains):
+        try: 
+            list_files =  File.query.filter(File.name.contains(contains))
+            return list_files
+        except Exception as e:
+            raise Exception(f'Error during search file by name contains - {e}')

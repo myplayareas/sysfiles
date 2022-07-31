@@ -1,3 +1,4 @@
+import json
 import os
 from myapp import app
 from flask import flash, jsonify, redirect, render_template, request, send_from_directory, url_for
@@ -13,9 +14,14 @@ users_service = Users()
 files_service = Files()
 
 class MyImage: # This represents your class
-  def __init__(self, id, name):
-    self.id = id
-    self.name = name
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name
+        }
 
 def user_directory(path_temp, user_id):
     user_path = path_temp + '/' + str(user_id)
@@ -42,6 +48,14 @@ def convert_to_list_objects(list_images):
     elemento = MyImage(index+1, each)
     list_objects_images.append(elemento)
   return list_objects_images
+
+# Converte lista de files em lista de objetos MyImage serializado
+def convert_to_list_objects_serializado(list_images):
+    list_objects_images = []
+    for each in list_images:
+        elemento = MyImage(each.id, each.name)
+        list_objects_images.append(elemento)
+    return list_objects_images
 
 # retorna a paginacao da lista de objetos images
 def get_images(offset=0, per_page=10, images=None):
@@ -155,3 +169,16 @@ def upload_progress_multiple_files():
         return redirect(url_for('list_files_page'))
 
     return '', 204
+
+@app.route('/uploads/search/my', methods=['GET'])
+@login_required
+def load_search_my_images():
+	return render_template('uploads/my_search_images.html')
+
+@app.route('/uploads/search/myimages', methods=['GET'])
+def search_my_images():
+    query = request.args.get('query')
+    list_files = users_service.get_my_files_contains(current_user.get_id(), query)
+    myimages = convert_to_list_objects_serializado(list_files)
+    json_string = json.dumps([ob.__dict__ for ob in myimages])
+    return {"result":json_string}
