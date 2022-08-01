@@ -10,6 +10,8 @@ usecase (Register) as uc_register
 usecase (Login) as uc_login
 usecase (Logout) as uc_logout
 usecase (Password \nrecover) as uc_password_recover
+usecase (My Profile) as uc_my_profile
+usecase (Config App) as uc_config_application
 usecase (Dashboard \nUser) as uc_dashboard_user
 usecase (Dashboard \nAdmin) as uc_dashboard_admin
 usecase (Manage My Images) as uc_manage_image
@@ -67,5 +69,7 @@ uc_login --> uc_dashboard_admin
 
 User --> uc_password_recover
 uc_dashboard_user --> uc_logout
+uc_dashboard_user -left- uc_my_profile
+uc_dashboard_admin -right- uc_config_application
 
 @enduml
