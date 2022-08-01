@@ -13,7 +13,7 @@ $(document).on("click", "#search", function (e) {
         $.ajax(
             {
                 type: "GET",
-                url: "{{url_for('search_my_images')}}",
+                url: "{{ url_for('search_my_images', id=current_user.id) }}",
                 data: { "query": search_term },
                 success: function (response) {
                         $("#result").empty(); //remove whatever is there and append whatever is returned
@@ -32,7 +32,7 @@ $(document).on("click", "#search", function (e) {
     <div class="card-body">
     <!-- Conteudo do corpo do card-->
 
-    <input type="text" size="18" name="query"><a href="{{ url_for('search_my_images') }}" id=search>Go!</a>
+    <input type="text" size="18" name="query"><a href="{{ url_for('search_my_images', id=current_user.id) }}" id=search>Go!</a>
     <br>
     <div id="result">
         Results will appear here!

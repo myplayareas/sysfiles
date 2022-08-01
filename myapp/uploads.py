@@ -57,6 +57,17 @@ def convert_to_list_objects_serializado(list_images):
         list_objects_images.append(elemento)
     return list_objects_images
 
+def convert_list_objects_to_json(list_images):
+    my_dict = {}
+    list_objects_images = []
+    for each in list_images:
+        elemento = MyImage(each.id, each.name)
+        list_objects_images.append(elemento)
+    for index, each in enumerate(list_objects_images): 
+        my_dict[index] = each.serialize()
+    my_json = json.dumps(my_dict)
+    return my_json
+
 # retorna a paginacao da lista de objetos images
 def get_images(offset=0, per_page=10, images=None):
     return images[offset: offset + per_page]
@@ -72,9 +83,9 @@ def tnails(filename, filename_path, thumbnail_path):
     except IOError as io:
         raise Exception(f'Erro in tnails - {io}')
 
-@app.route('/uploads/images')
+@app.route('/uploads/users/<int:id>/images')
 @login_required
-def pagination_list_files_page():
+def pagination_list_files_page(id):
     page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
     # Carrega a lista de objetos images
     images = convert_to_list_objects(update_list_images())
@@ -86,7 +97,6 @@ def pagination_list_files_page():
         flash(msg, category='success')
     return render_template('uploads/pagination_list_files.html', images=pagination_images, page=page, per_page=per_page, pagination=pagination)
 
-# http://localhost:5000/uploads/users/5/images/armando.jpeg
 @app.route('/uploads/users/<int:id>/images/<name>')
 @login_required
 def download_file(id, name):
@@ -115,7 +125,7 @@ def delete_image(id, name):
             flash(f'Error {e} during deletion of {name}!', category='danger')
     else:
         flash(f'The file {name} does not exist!', category='danger')        
-    return redirect(url_for('pagination_list_files_page'))
+    return redirect(url_for('pagination_list_files_page', id=id))
 
 @app.route('/uploads/progress', methods=['GET'])
 @login_required
@@ -170,15 +180,14 @@ def upload_progress_multiple_files():
 
     return '', 204
 
-@app.route('/uploads/search/my', methods=['GET'])
+@app.route('/uploads/users/<int:id>/search/my', methods=['GET'])
 @login_required
-def load_search_my_images():
-	return render_template('uploads/my_search_images.html')
+def load_search_my_images(id):
+    return render_template('uploads/my_search_images.html', id=id)
 
-@app.route('/uploads/search/myimages', methods=['GET'])
-def search_my_images():
+@app.route('/uploads/users/<int:id>/search/myimages', methods=['GET'])
+def search_my_images(id):
     query = request.args.get('query')
-    list_files = users_service.get_my_files_contains(current_user.get_id(), query)
-    myimages = convert_to_list_objects_serializado(list_files)
-    json_string = json.dumps([ob.__dict__ for ob in myimages])
+    list_files = users_service.get_my_files_contains(id, query)    
+    json_string = convert_list_objects_to_json(list_files)
     return {"result":json_string}
