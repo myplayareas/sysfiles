@@ -78,3 +78,61 @@ flask run --host=0.0.0.0 --port=5000
 *myapp/uploads.py* - módulo que manipula as rotas de uploads de arquivos
 
 *myapp/utils.py* - módulo de utilidades genéricas da aplicação
+
+## 6. Executar no Heroku
+
+Acesse sua conta do Heroku via terminal
+```bash
+heroku login
+```
+
+Baixe a versão inicial disponível em [v.1.0.0](https://github.com/myplayareas/sysfiles/archive/refs/tags/v1.0.0.zip)
+
+Descompacte em sysfiles
+```bash
+cd sysfiles
+```
+
+Inicialize o repositorio git
+```bash
+git init
+```
+
+Crie o arquivo bash de configuração (config.sh) da aplicação
+```bash
+#!/bin/sh
+export FLASK_APP=run.py && export FLASK_ENV=development
+```
+
+Atribua a permissão de execução ao arquivo de configuração
+```bash
+chmod u+x config.sh
+```
+
+Crie o arquivo (Procfile) de deploy e execução da release 
+```bash
+release: bash config.sh
+web: gunicorn run:app
+```
+
+Adicione todo o conteúdo da pasta sysfiles no repositório git
+```bash
+git add .
+```
+
+Faça o commit de todo o conteúdo 
+```bash
+git commit -m "make it better"
+```
+
+Crie o aplicativo sysfiles no Heroku usando o comando heroku apps: create [app name]
+```bash
+heroku apps:create sysfiles
+```
+
+Suba as modificações locais para o git do Heroku
+```bash
+git push heroku master
+```
+
+Caso o deploy aconteça com sucesso a aplicação estará disponível em [http://sysfiles.herokuapp.com](http://sysfiles.herokuapp.com)
